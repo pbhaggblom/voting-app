@@ -16,7 +16,6 @@ public class VoteResource {
     @POST
     @Path("/{option}")
     public void vote(@PathParam("option") String option) {
-        System.out.println("Vote: " + option);
         long count = ds.value(Long.class).incr("votes:" + option);
         socket.broadcast("{\"option\": \"" + option + "\", \"total\": " + count + "}");
     }
