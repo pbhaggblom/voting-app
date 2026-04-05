@@ -1,65 +1,50 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { postVote, connectToResults } from './services/voteService'
+import { ref, onMounted, computed } from 'vue'
+import { connectToResults, getInitialResults } from './services/voteService'
+import VoteButton from './components/VoteButton.vue'
+import ResultBar from './components/ResultBar.vue'
 
-const votes = ref({ A: 0, B: 0 })
+const votes = ref({})
 
-const vote = (option) => {
-  postVote(option).catch((error) => console.error('Could not post vote', error))
-}
+const totalVotes = computed(() => {
+  return Object.values(votes.value).reduce((sum, count) => sum + count, 0)
+})
 
 const calculateWidth = (count) => {
-  const total = votes.value.A + votes.value.B
-  return total === 0 ? 0 : (count / total) * 100
+  return totalVotes.value === 0 ? 0 : (count / totalVotes.value) * 100
 }
 
-onMounted(() => {
+onMounted(async () => {
+  const initialData = await getInitialResults()
+  if (initialData) {
+    votes.value = initialData
+  }
+
   connectToResults((data) => {
-    votes.value[data.option] = data.total
+    votes.value = {
+      ...votes.value,
+      [data.option]: data.total,
+    }
   })
 })
 </script>
 
 <template>
   <div id="app">
-    <h1>Vote</h1>
+    <h1 class="text-center">Vote</h1>
 
-    <div class="options">
-      <button @click="vote('A')">A</button>
-      <button @click="vote('B')">B</button>
+    <div class="options m-5 d-flex justify-content-center">
+      <div v-for="(_, label) in votes" :key="label">
+        <VoteButton :option="label" />
+      </div>
     </div>
 
-    <div class="results">
-      <span>A: {{ votes.A }}</span>
-      <div class="bar">
-        <div :style="{ width: calculateWidth(votes.A) + '%' }" class="fill a"></div>
-      </div>
-      <span>B: {{ votes.B }}</span>
-      <div class="bar">
-        <div :style="{ width: calculateWidth(votes.B) + '%' }" class="fill b"></div>
+    <div class="results m-5">
+      <div v-for="(count, label) in votes" :key="label">
+        <ResultBar :option="label" :result="count" :bar-percent="calculateWidth(count)" />
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.results,
-.options {
-  margin: 10px;
-}
-.bar {
-  margin: 20px 0;
-  background: #eee;
-  height: 30px;
-  position: relative;
-}
-.fill {
-  height: 100%;
-}
-.fill.a {
-  background: #42b983;
-}
-.fill.b {
-  background: #165da8;
-}
-</style>
+<style scoped></style>
