@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: voting-backend
+  name: voting-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voting-backend
+  template:
+    metadata:
+      labels:
+        app: voting-backend
+    spec:
+      containers:
+      - image: pbhaggblom/voting-backend:v9
+        name: voting-backend
+        env:
+        - name: REDIS_HOST
+          value: redis-service
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
