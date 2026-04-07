@@ -31,7 +31,7 @@ onMounted(async () => {
 
 <template>
   <div id="app">
-    <h1 class="text-center">Vote</h1>
+    <h1 class="text-center">Top language 2026</h1>
 
     <div class="options m-5 d-flex justify-content-center">
       <div v-for="(_, label) in votes" :key="label">

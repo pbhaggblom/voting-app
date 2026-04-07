@@ -14,12 +14,12 @@ defineProps(['option', 'result', 'barPercent'])
 <style scoped>
 .bar {
   margin: 20px 0;
-  background: #eee;
+  background: #fbf2d5;
   height: 30px;
   position: relative;
 }
 .fill {
   height: 100%;
-  background: #165da8;
+  background: #7fa99b;
 }
 </style>
