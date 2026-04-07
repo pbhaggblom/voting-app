@@ -15,7 +15,7 @@ spec:
         app: voting-backend
     spec:
       containers:
-      - image: pbhaggblom/voting-backend:v9
+      - image: pbhaggblom/voting-backend:native
         name: voting-backend
         env:
         - name: REDIS_HOST

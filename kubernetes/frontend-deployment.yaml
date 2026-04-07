@@ -16,7 +16,7 @@ spec:
         app: voting-frontend
     spec:
       containers:
-      - image: pbhaggblom/voting-frontend:v6.1
+      - image: pbhaggblom/voting-frontend:v7
         name: voting-frontend
         ports:
         - containerPort: 80
