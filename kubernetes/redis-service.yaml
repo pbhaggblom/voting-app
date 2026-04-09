@@ -5,13 +5,10 @@ metadata:
     app: redis-service
   name: redis-service
 spec:
-  ports:
-  - name: 6379-6379
-    port: 6379
-    protocol: TCP
-    targetPort: 6379
   selector:
     app: redis
-  type: NodePort
-status:
-  loadBalancer: {}
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
+  type: ClusterIP
